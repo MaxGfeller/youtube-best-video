@@ -1,0 +1,26 @@
+{
+  "name": "youtube-best-video",
+  "version": "0.0.1",
+  "description": "Find the best video for a given song name.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaxGfeller/youtube-best-video"
+  },
+  "keywords": [
+    "youtube",
+    "music",
+    "video",
+    "song",
+    "best",
+    "quality"
+  ],
+  "author": "Max Gfeller <max.gfeller@gmail.com>",
+  "license": "BSD",
+  "dependencies": {
+    "youtube-search": "0.0.2"
+  }
+}
