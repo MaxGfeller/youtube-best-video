@@ -8,6 +8,8 @@ var _badDescriptionWords = ['cover', 'live'];
 var _getRating = function(video) {
   var rating = 0;
   
+  if(!video.description) return rating;
+
   for(var i = 0; i < _goodDescriptionWords.length; i++) {
     if(video.description.toLowerCase().indexOf(_goodDescriptionWords[i]) > -1) {
       rating++;
