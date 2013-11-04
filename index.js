@@ -10,17 +10,11 @@ var _getRating = function(video, title) {
   
   if(!video.description) return rating;
 
-  console.log(video);
-  console.log(title);
-
   // check if the title matches
   var parts = title.split(' ');
   for(var i = 0; i < parts.length; i++) {
-    console.log('part is ' + parts[i]);
-    console.log('index is ' + video.title.indexOf(parts[i]));
     if(video.title.indexOf(parts[i]) < 0 && parts[i].length > 1) {
       rating += 3;
-      console.log('+3');
     }
   }
 
@@ -28,14 +22,11 @@ var _getRating = function(video, title) {
   var diff = video.title.length - title.length;
   if(diff < 0) diff *= -1;
 
-  console.log('diff is ' + diff);
   if(diff > 4) {
     rating -= 4;
   } else {
     rating += 4;
   }
-
-  console.log('rating is ' + rating);
 
 //  for(var i = 0; i < _goodDescriptionWords.length; i++) {
 //    if(video.description.toLowerCase().indexOf(_goodDescriptionWords[i]) > -1) {
