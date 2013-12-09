@@ -86,22 +86,10 @@ var _getRating = function(video, title) {
     rating += 4;
   }
 
-//  for(var i = 0; i < _goodDescriptionWords.length; i++) {
-//    if(video.description.toLowerCase().indexOf(_goodDescriptionWords[i]) > -1) {
-//      rating++;
-//    }
-//  }
-//
-//  for(var i = 0; i < _badDescriptionWords.length; i++) {
-//    if(video.description.toLowerCase().indexOf(_badDescriptionWords[i]) > -1) {
-//      rating--;
-//    }
-//  }
-
   return rating;
 }
 
-youtubeBestVideo.findBestVideo = function(title, cb) {
+youtubeBestVideo.findBestMusicVideo = function(title, cb) {
   youtubeSearch.search(title, {}, function(err, results) {
     if(err) cb(err);
 
