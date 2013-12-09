@@ -59,12 +59,23 @@ var _viewCountFilter = function(video, title) {
   return rating;
 }
 
-var _favoritesCountFilter = function(video, title) {
-
-}
-
+/**
+ * Filter a video based on a blacklist.
+ * @param  object video The video object as it is being return by youtube-search
+ * @param  string title The actual title after which has been searched
+ * @return float        The score between 0 and 1
+ */
 var _blacklistWordsFilter = function(video, title) {
+  var blacklist = ['cover', 'live'];
 
+  for(var i = 0; i < blacklist.length; i++) {
+    if(video.title.toLowerCase().indexOf(blacklist[i]) > -1 
+      || (video.description && video.description.toLowerCase().indexOf(blacklist[i]) > -1)) {
+      return 0;
+    }
+  }
+
+  return 1;
 }
 
 var _whitelistWordsFilter = function(video, title) {
@@ -79,7 +90,7 @@ var _getRating = function(video, title) {
   var rating = 0;
   
   console.log(video);
-  process.exit(0);
+  // process.exit(0);
 
 
   if(!video.description) return rating;
