@@ -39,8 +39,24 @@ var _videoTitleFilter = function(video, title) {
   return rating;
 }
 
+/**
+ * Filter a video based on its view count.
+ * @param  object video The video object as it is being return by youtube-search
+ * @param  string title The actual title after which has been searched
+ * @return float        The score between 0 and 1
+ */
 var _viewCountFilter = function(video, title) {
+  var rating = 0;
 
+  var viewCount = parseInt(video.statistics.viewCount);
+
+  if(viewCount > 500000) {
+    rating = 1;
+  } else {
+    rating = (1 / 500000) * viewCount;
+  }
+
+  return rating;
 }
 
 var _favoritesCountFilter = function(video, title) {
