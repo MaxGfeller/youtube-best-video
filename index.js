@@ -2,9 +2,6 @@ var youtubeSearch = require('youtube-search');
 
 var youtubeBestVideo = {};
 
-var _goodDescriptionWords = ['official', 'download', 'itunes', 'pre-order', 'performing'];
-var _badDescriptionWords = ['cover', 'live'];
-
 /**
  * Filter a video based on the video title
  * @param  object video The video object as it is being return by youtube-search
@@ -14,7 +11,7 @@ var _badDescriptionWords = ['cover', 'live'];
 var _videoTitleFilter = function(video, title) {
   var rating = 0;
   var titleParts = title.split(' ');
-  var disassembledTitle = title.toLowerCase();
+  var disassembledTitle = video.title.toLowerCase();
 
   // Check if every word in the title exists in the video title
   for(var i = 0; i < titleParts.length; i++) {
@@ -23,7 +20,7 @@ var _videoTitleFilter = function(video, title) {
 
     if(video.title.toLowerCase().indexOf(titlePart.toLowerCase()) > -1) {
       rating += 1 / titleParts.length;
-      disassembledTitle.replace(titlePart.toLowerCase(), '');
+      disassembledTitle = disassembledTitle.replace(titlePart.toLowerCase(), '', 'gi');
     }
   }
 
@@ -33,8 +30,12 @@ var _videoTitleFilter = function(video, title) {
     var disassembledPart = disassembledParts[i];
     if(disassembledPart.length > 2) {
       rating -= 2 * (1 / titleParts.length);
+    } else {
+      rating += 1 / titleParts.length;
     }
   }
+
+  if(rating < 0) rating = 0;
 
   return rating;
 }
@@ -120,10 +121,6 @@ var _authorWhitelistWordsFilter = function(video, title) {
 
 var _getRating = function(video, title) {
   var rating = 0;
-  
-  console.log(video);
-  // process.exit(0);
-
 
   if(!video.description) return rating;
 
@@ -149,16 +146,24 @@ var _getRating = function(video, title) {
 }
 
 youtubeBestVideo.findBestMusicVideo = function(title, cb) {
+  var filters = [_videoTitleFilter];
+  
   youtubeSearch.search(title, {}, function(err, results) {
     if(err) cb(err);
 
     var bestOne = null;
-    var bestRating = -10;
+    var bestRating = 0;
 
     results.forEach(function(result, index) {
-      if(_getRating(result, title) > bestRating) {
+      var rating = 0;
+
+      for(var i = 0; i < filters.length; i++) {
+        rating += filters[i].call(this, result, title);
+      }
+
+      if(rating > bestRating) {
         bestOne = result;
-        bestRating = _getRating(result, title);
+        bestRating = rating;
       }
 
       if(index === results.length - 1) {
