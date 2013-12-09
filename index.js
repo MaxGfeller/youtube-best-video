@@ -78,12 +78,44 @@ var _blacklistWordsFilter = function(video, title) {
   return 1;
 }
 
+/**
+ * Filter a video based on a whitelist.
+ * @param  object video The video object as it is being return by youtube-search
+ * @param  string title The actual title after which has been searched
+ * @return float        The score between 0 and 1
+*/
 var _whitelistWordsFilter = function(video, title) {
+  var whitelist = ['vevo', 'official', 'itunes', 'preorder', 'pre-order', 'download'];
 
+  var rating = 0;
+
+  for(var i = 0; i < whitelist.length; i++) {
+    if(video.title.toLowerCase().indexOf(whitelist[i]) > -1 
+      || (video.description && video.description.toLowerCase().indexOf(whitelist[i]) > -1)) {
+      rating += 1 / whitelist.length;
+    }
+  }
+
+  return rating;
 }
 
+/**
+ * Filter a video based on the author's name.
+ * @param  object video The video object as it is being return by youtube-search
+ * @param  string title The actual title after which has been searched
+ * @return float        The score between 0 and 1
+ */
 var _authorWhitelistWordsFilter = function(video, title) {
+  var whitelist = ['vevo', 'official'];
 
+  for(var i = 0; i < whitelist.length; i++) {
+    if(video.title.toLowerCase().indexOf(whitelist[i]) > -1
+      || (video.description && video.description.toLowerCase().indexOf(whitelist[i]) > -1)) {
+      return 1;
+    }
+  }
+
+  return 0;
 }
 
 var _getRating = function(video, title) {
