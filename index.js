@@ -28,7 +28,7 @@ var _videoTitleFilter = function(video, title) {
   var disassembledParts = disassembledTitle.trim().split(' ');
   for(var i = 0; i < disassembledParts.length; i++) {
     var disassembledPart = disassembledParts[i];
-    if(disassembledPart.length > 2) {
+    if(disassembledPart.length > 1) {
       rating -= 2 * (1 / titleParts.length);
     } else {
       rating += 1 / titleParts.length;
@@ -86,7 +86,7 @@ var _blacklistWordsFilter = function(video, title) {
  * @return float        The score between 0 and 1
 */
 var _whitelistWordsFilter = function(video, title) {
-  var whitelist = ['vevo', 'official', 'itunes', 'preorder', 'pre-order', 'download'];
+  var whitelist = ['hd', 'vevo', 'official', 'itunes', 'preorder', 'pre-order', 'download'];
 
   var rating = 0;
 
@@ -146,7 +146,7 @@ var _getRating = function(video, title) {
 }
 
 youtubeBestVideo.findBestMusicVideo = function(title, cb) {
-  var filters = [_videoTitleFilter];
+  var filters = [_videoTitleFilter, _viewCountFilter, _whitelistWordsFilter, _blacklistWordsFilter];
   
   youtubeSearch.search(title, {}, function(err, results) {
     if(err) cb(err);
