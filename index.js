@@ -154,22 +154,24 @@ youtubeBestVideo.findBestMusicVideo = function(title, cb) {
     var bestOne = null;
     var bestRating = 0;
 
-    results.forEach(function(result, index) {
-      var rating = 0;
+    if (results !== undefined ) {
+      results.forEach(function(result, index) {
+        var rating = 0;
 
-      for(var i = 0; i < filters.length; i++) {
-        rating += filters[i].call(this, result, title);
-      }
+        for(var i = 0; i < filters.length; i++) {
+          rating += filters[i].call(this, result, title);
+        }
 
-      if(rating > bestRating) {
-        bestOne = result;
-        bestRating = rating;
-      }
+        if(rating > bestRating) {
+          bestOne = result;
+          bestRating = rating;
+        }
 
-      if(index === results.length - 1) {
-        cb(null, bestOne);
-      }
-    });
+        if(index === results.length - 1) {
+          cb(null, bestOne);
+        }
+      });
+    }
   });
 };
 
