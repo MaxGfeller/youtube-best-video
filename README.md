@@ -12,7 +12,7 @@ The module is available via npm and can be installed as follows:
 ``` javascript
 var bestVideo = require('youtube-best-video');
 
-bestVideo.findBestVideo('Deadmau5 - Ghosts N Stuff', function(err, video) {
+bestVideo.findBestMusicVideo('Deadmau5 - Ghosts N Stuff', function(err, video) {
   if(err) return console.log(err);
 
   console.dir(video);
