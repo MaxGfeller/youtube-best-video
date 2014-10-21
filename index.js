@@ -150,26 +150,31 @@ youtubeBestVideo.findBestMusicVideo = function(title, cb) {
   
   youtubeSearch.search(title, {}, function(err, results) {
     if(err) cb(err);
-
     var bestOne = null;
     var bestRating = 0;
+    // If there are results
+    if (results !== undefined && results.length>0) {
+      results.forEach(function(result, index) {
+        var rating = 0;
 
-    results.forEach(function(result, index) {
-      var rating = 0;
+        for(var i = 0; i < filters.length; i++) {
+          rating += filters[i].call(this, result, title);
+        }
 
-      for(var i = 0; i < filters.length; i++) {
-        rating += filters[i].call(this, result, title);
-      }
+        if(rating > bestRating) {
+          bestOne = result;
+          bestRating = rating;
+        }
 
-      if(rating > bestRating) {
-        bestOne = result;
-        bestRating = rating;
-      }
-
-      if(index === results.length - 1) {
-        cb(null, bestOne);
-      }
-    });
+        if(index === results.length - 1) {
+          cb(null, bestOne);
+        }
+      });
+    }
+    // If there are no results
+    else {
+      cb("error no results found");
+    }
   });
 };
 
