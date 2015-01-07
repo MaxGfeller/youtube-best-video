@@ -119,6 +119,20 @@ var _authorWhitelistWordsFilter = function(video, title) {
   return 0;
 }
 
+/**
+ * Filter a video based on its duration
+ * @param  object video The video object as it is being return by youtube-search
+ * @param  string title The actual title after which has been searched
+ * @return float        The score between 0 and 5
+ */
+var _videoDurationFilter = function(video, title, duration) {
+  var videoDuration = parseFloat(video.duration) * 1000;
+  var diff = Math.abs(videoDuration - duration);
+
+  if (diff < 1000) return 5;
+  return 5000 / diff;
+}
+
 var _getRating = function(video, title) {
   var rating = 0;
 
@@ -145,8 +159,17 @@ var _getRating = function(video, title) {
   return rating;
 }
 
-youtubeBestVideo.findBestMusicVideo = function(title, cb) {
+youtubeBestVideo.findBestMusicVideo = function(title, duration, cb) {
+  if ('function' === typeof duration) {
+    cb = duration;
+    duration = undefined;
+  }
+
   var filters = [_videoTitleFilter, _viewCountFilter, _whitelistWordsFilter, _blacklistWordsFilter];
+
+  if (duration) {
+    filters.push(_videoDurationFilter);
+  }
   
   youtubeSearch.search(title, {}, function(err, results) {
     if(err) cb(err);
@@ -158,7 +181,7 @@ youtubeBestVideo.findBestMusicVideo = function(title, cb) {
         var rating = 0;
 
         for(var i = 0; i < filters.length; i++) {
-          rating += filters[i].call(this, result, title);
+          rating += filters[i].call(this, result, title, duration);
         }
 
         if(rating > bestRating) {
