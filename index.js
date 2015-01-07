@@ -121,9 +121,10 @@ var _authorWhitelistWordsFilter = function(video, title) {
 
 /**
  * Filter a video based on its duration
- * @param  object video The video object as it is being return by youtube-search
- * @param  string title The actual title after which has been searched
- * @return float        The score between 0 and 5
+ * @param  object video    The video object as it is being return by youtube-search
+ * @param  string title    The actual title after which has been searched
+ * @param  string duration The actual duration after which has been searched
+ * @return float           The score between 0 and 5
  */
 var _videoDurationFilter = function(video, title, duration) {
   var videoDuration = parseFloat(video.duration) * 1000;
