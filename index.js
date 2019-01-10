@@ -50,7 +50,6 @@ var _videoTitleFilter = function(video, title) {
 var _viewCountFilter = function(video, title) {
   var rating = 0;
 
-  console.log(video)
   var viewCount = parseInt(video.statistics.viewCount);
 
   if(viewCount > 500000) {
@@ -177,8 +176,6 @@ youtubeBestVideo.findBestMusicVideo = function(title, opts, cb) {
   }
 
   youtubeSearch(title, { key: apiKey }, function(err, results) {
-    console.log('results', results)
-
     if(err) cb(err);
     var bestOne = null;
     var bestRating = 0;
