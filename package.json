@@ -21,6 +21,6 @@
   "author": "Max Gfeller <max.gfeller@gmail.com>",
   "license": "BSD",
   "dependencies": {
-    "youtube-search": "~0.0.3"
+    "youtube-search": "^1.1.4"
   }
 }

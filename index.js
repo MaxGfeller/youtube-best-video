@@ -1,6 +1,7 @@
 var youtubeSearch = require('youtube-search');
 
 var youtubeBestVideo = {};
+var apiKey = null
 
 /**
  * Filter a video based on the video title
@@ -49,6 +50,7 @@ var _videoTitleFilter = function(video, title) {
 var _viewCountFilter = function(video, title) {
   var rating = 0;
 
+  console.log(video)
   var viewCount = parseInt(video.statistics.viewCount);
 
   if(viewCount > 500000) {
@@ -70,7 +72,7 @@ var _blacklistWordsFilter = function(video, title) {
   var blacklist = ['cover', 'live'];
 
   for(var i = 0; i < blacklist.length; i++) {
-    if(video.title.toLowerCase().indexOf(blacklist[i]) > -1 
+    if(video.title.toLowerCase().indexOf(blacklist[i]) > -1
       || (video.description && video.description.toLowerCase().indexOf(blacklist[i]) > -1)) {
       return 0;
     }
@@ -91,7 +93,7 @@ var _whitelistWordsFilter = function(video, title) {
   var rating = 0;
 
   for(var i = 0; i < whitelist.length; i++) {
-    if(video.title.toLowerCase().indexOf(whitelist[i]) > -1 
+    if(video.title.toLowerCase().indexOf(whitelist[i]) > -1
       || (video.description && video.description.toLowerCase().indexOf(whitelist[i]) > -1)) {
       rating += 1 / whitelist.length;
     }
@@ -160,19 +162,23 @@ var _getRating = function(video, title) {
   return rating;
 }
 
-youtubeBestVideo.findBestMusicVideo = function(title, duration, cb) {
-  if ('function' === typeof duration) {
-    cb = duration;
-    duration = undefined;
+youtubeBestVideo.findBestMusicVideo = function(title, opts, cb) {
+  var duration = opts.duration || null
+  apiKey = opts.apiKey
+
+  if (!apiKey) {
+    throw new Error('no api key specified')
   }
 
-  var filters = [_videoTitleFilter, _viewCountFilter, _whitelistWordsFilter, _blacklistWordsFilter];
+  var filters = [_videoTitleFilter, _whitelistWordsFilter, _blacklistWordsFilter];
 
   if (duration) {
     filters.push(_videoDurationFilter);
   }
-  
-  youtubeSearch.search(title, {}, function(err, results) {
+
+  youtubeSearch(title, { key: apiKey }, function(err, results) {
+    console.log('results', results)
+
     if(err) cb(err);
     var bestOne = null;
     var bestRating = 0;
